@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Employer Dashboard — HISAAB BARABAR</title>
+  <meta name="description" content="Labor Ledger, Attendance Audit, Fatigue Flagging, and Safety Hazard Triage">
+  <link rel="stylesheet" href="/css/editorial.css">
+</head>
+<body>
+
+  <!-- Masthead -->
+  <header class="editorial-masthead">
+    <div class="page-container">
+      <div class="masthead-top">
+        <a href="/" class="wordmark">HISAAB BARABAR <span class="sub">EMPLOYER & COMPLIANCE PORTAL</span></a>
+        <div class="masthead-meta">
+          <span>UN SDG 8.5 & 8.8 AUDIT</span>
+          <span>•</span>
+          <span id="masthead-time">--:--:--</span>
+        </div>
+      </div>
+      <nav class="masthead-nav" aria-label="Admin Navigation">
+        <a href="/">Overview</a>
+        <a href="/worker">Worker Portal</a>
+        <a href="/admin" class="active">Employer Dashboard</a>
+        <a href="#shifts-section">Attendance & Fatigue</a>
+        <a href="#hazards-section">Hazard Triage</a>
+        <a href="#policy-section">Sector Policies</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+    
+    <!-- Header with Sector Selector and Re-seed Action -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+      <div>
+        <p class="overline">Labor Ledger Administration</p>
+        <h1 class="headline-serif headline-section">Compliance & Oversight</h1>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <!-- Sector Filter Pills -->
+        <div class="sector-pills" role="tablist" aria-label="Sector Filter">
+          <button type="button" class="sector-pill active" data-sector="all" role="tab">All Sectors</button>
+          <button type="button" class="sector-pill" data-sector="construction" role="tab">Construction</button>
+          <button type="button" class="sector-pill" data-sector="college" role="tab">College</button>
+        </div>
+
+        <button id="btn-admin-reseed" class="btn btn-sm">
+          Re-seed Demo Data
+        </button>
+      </div>
+    </div>
+
+    <!-- Aggregate Metrics Row -->
+    <section class="editorial-grid-asym" style="margin-bottom: 2.5rem;">
+      
+      <!-- Primary Metrics Panel -->
+      <div class="editorial-panel" style="margin-bottom: 0;">
+        <p class="overline">Shift & Financial Summary</p>
+        <div class="editorial-grid-3" style="margin-top: 1rem;">
+          <div class="metric-box">
+            <span class="overline">Active Clocked-In</span>
+            <div class="metric-value" id="stat-active">...</div>
+            <p class="metric-sub">Workers on duty right now</p>
+          </div>
+          <div class="metric-box">
+            <span class="overline">Total Logged Hours</span>
+            <div class="metric-value tabular-numbers" id="stat-hours">...</div>
+            <p class="metric-sub" id="stat-ot-sub">Incl. ... hrs overtime</p>
+          </div>
+          <div class="metric-box">
+            <span class="overline">Payroll Obligation</span>
+            <div class="metric-value tabular-numbers" id="stat-net-pay">...</div>
+            <p class="metric-sub" id="stat-gross-sub">Gross: ₹...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Safety & Fatigue Alerts Box -->
+      <div class="editorial-panel-bordered" style="background-color: #FFFDF7; margin-bottom: 0;">
+        <p class="overline">UN SDG 8.8 Safety Vitals</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+          <div class="metric-box" style="border-bottom: none;">
+            <span class="overline">Open Hazards</span>
+            <div class="metric-value" id="stat-open-hazards" style="color: var(--orange-red);">...</div>
+            <p class="metric-sub" id="stat-critical-sub">... critical priority</p>
+          </div>
+          <div class="metric-box" style="border-bottom: none;">
+            <span class="overline">Fatigue Alerts</span>
+            <div class="metric-value" id="stat-fatigue-alerts" style="color: var(--amber);">...</div>
+            <p class="metric-sub">Shift safety limit breaches</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 1: Shift Attendance & Fatigue Ledger -->
+    <section id="shifts-section" class="editorial-panel" style="margin-bottom: 3rem;">
+      <div class="panel-header">
+        <div>
+          <p class="overline">Deterministic Shift Audit</p>
+          <h2 class="headline-serif" style="font-size: 1.6rem; margin-top: 0.2rem;">Attendance & Fatigue Ledger</h2>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <label for="shift-status-filter" class="overline" style="margin-bottom: 0;">Status:</label>
+          <select id="shift-status-filter" class="form-control" style="min-height: 36px; padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;">
+            <option value="">All Shifts</option>
+            <option value="active">Active Now</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        Every shift calculation is computed deterministically. Shifts exceeding maximum legal daily fatigue thresholds are flagged immediately for labor inspection.
+      </p>
+
+      <div class="table-responsive">
+        <table class="editorial-table" id="shifts-table">
+          <thead>
+            <tr>
+              <th>Shift ID</th>
+              <th>Date</th>
+              <th>Worker</th>
+              <th>Sector</th>
+              <th class="text-right">Total Hrs</th>
+              <th class="text-right">Regular Hrs</th>
+              <th class="text-right">Overtime</th>
+              <th class="text-right">Net Pay (₹)</th>
+              <th>Fatigue & Safety Status</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="shifts-tbody">
+            <tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading shift ledger...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Safety Hazard Triage Queue -->
+    <section id="hazards-section" class="editorial-panel-bordered" style="background-color: #FFFDF7; margin-bottom: 3rem;">
+      <div class="panel-header">
+        <div>
+          <p class="overline">Worker Protection & Corrective Actions</p>
+          <h2 class="headline-serif" style="font-size: 1.6rem; margin-top: 0.2rem;">Safety Hazard Triage Queue</h2>
+        </div>
+        <span class="badge badge-danger">OSHA / SDG 8.8 QUEUE</span>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        Review reports submitted by on-site workers. Update mitigation status, assign corrective work orders, and document safety resolutions.
+      </p>
+
+      <div id="hazards-list-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: Sector Configuration & Fair Pay Assumptions -->
+    <section id="policy-section" class="editorial-panel">
+      <div class="panel-header">
+        <div>
+          <p class="overline">Configurable Economic Assumptions</p>
+          <h2 class="headline-serif" style="font-size: 1.6rem; margin-top: 0.2rem;">Sector Policy & Rate Assumptions</h2>
+        </div>
+        <span class="badge badge-neutral">DETERMINISTIC PARAMETERS</span>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+        Tune base wage rates, overtime multiples, and fatigue hazard caps per sector. Changes immediately apply to future shift check-outs and calculations.
+      </p>
+
+      <div class="editorial-grid-2" id="sector-configs-container">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Payslip Receipt Modal Overlay -->
+  <div id="payslip-modal" class="editorial-modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="editorial-modal-body">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+        <span class="overline">Audited Ledger Record</span>
+        <button id="btn-close-modal" class="btn btn-sm">✕ Close</button>
+      </div>
+
+      <div id="receipt-print-area">
+        <!-- Rendered Payslip Receipt -->
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;" class="no-print">
+        <button onclick="window.print()" class="btn btn-primary btn-sm">🖨 Print / Export Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="editorial-footer">
+    <div class="page-container footer-inner">
+      <div>
+        <span class="wordmark" style="font-size: 1.1rem;">HISAAB BARABAR</span>
+        <p style="font-size: 0.8rem; margin-top: 0.35rem;">Employer & Compliance Portal. UN SDG 8.</p>
+      </div>
+      <div>
+        <a href="/worker" class="btn btn-sm">Worker Time Clock & Hazard Portal →</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
