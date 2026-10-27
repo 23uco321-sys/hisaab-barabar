@@ -209,8 +209,8 @@ async function loadHazardsQueue() {
           </div>
 
           <!-- Triage Actions -->
-          <div style="border-top: 1px dashed var(--rule-subtle); padding-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
-            <div style="flex: 1; min-width: 220px;">
+          <div style="border-top: 1px dashed var(--rule-subtle); padding-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end;">
+            <div style="flex: 1 1 180px; min-width: 0; width: 100%;">
               <label class="form-label" style="font-size: 0.68rem;">Action Status</label>
               <select class="form-control hazard-status-select" data-id="${h.id}" style="min-height: 38px; padding: 0.4rem 0.75rem; font-size: 0.82rem;">
                 <option value="reported" ${h.status === 'reported' ? 'selected' : ''}>Reported (Awaiting Inspection)</option>
@@ -220,7 +220,7 @@ async function loadHazardsQueue() {
               </select>
             </div>
 
-            <div style="flex: 2; min-width: 280px;">
+            <div style="flex: 2 1 180px; min-width: 0; width: 100%;">
               <label class="form-label" style="font-size: 0.68rem;">Mitigation Note / Corrective Action</label>
               <input type="text" class="form-control hazard-notes-input" data-id="${h.id}" 
                      placeholder="Document corrective actions taken..." 
